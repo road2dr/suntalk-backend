@@ -12,11 +12,15 @@ async def lifespan(app: FastAPI):
     yield
 
 
+import os
+
+SERVER_URL = os.getenv("SERVER_URL", "http://localhost:8000")
+
 app = FastAPI(
     title="SunTalk Backend",
     description="SunTalk 채팅앱 관리 백엔드 API",
     version="1.0.0",
-    servers=[{"url": "http://localhost:8000", "description": "개발 서버"}],
+    servers=[{"url": SERVER_URL, "description": "API 서버"}],
     lifespan=lifespan,
 )
 

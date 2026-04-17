@@ -33,6 +33,7 @@ services:
       MYSQL_USER: ${MYSQL_USER:-suntalk}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD:-suntalk123}
       MYSQL_DATABASE: ${MYSQL_DATABASE:-suntalk}
+      SERVER_URL: ${SERVER_URL:-http://localhost:8000}
       SENDBIRD_APP_ID: ${SENDBIRD_APP_ID:-}
       SENDBIRD_API_TOKEN: ${SENDBIRD_API_TOKEN:-}
       ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}

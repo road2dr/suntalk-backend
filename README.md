@@ -1,6 +1,7 @@
 # SunTalk Backend
 
 SunTalk 채팅앱 관리 백엔드 API (FastAPI + MySQL + Sendbird)
+Suntalk Made with opencode
 
 ## 로컬 개발
 
