@@ -1,0 +1,55 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpassword}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-suntalk}
+      MYSQL_USER: ${MYSQL_USER:-suntalk}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-suntalk123}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./mysql_schema.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_USER: ${MYSQL_USER:-suntalk}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-suntalk123}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-suntalk}
+      SENDBIRD_APP_ID: ${SENDBIRD_APP_ID:-}
+      SENDBIRD_API_TOKEN: ${SENDBIRD_API_TOKEN:-}
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin123}
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  admin:
+    build:
+      context: ../suntalk-admin
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  mysql_data:
